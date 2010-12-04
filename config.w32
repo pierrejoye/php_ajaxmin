@@ -1,0 +1,72 @@
+/*
+   +----------------------------------------------------------------------+
+   | PHP Version 5                                                        |
+   +----------------------------------------------------------------------+
+   | Copyright (c) 1997-2010 The PHP Group                                |
+   +----------------------------------------------------------------------+
+   | This source file is subject to version 3.01 of the PHP license,      |
+   | that is bundled with this package in the file LICENSE, and is        |
+   | available through the world-wide-web at the following url:           |
+   | http://www.php.net/license/3_01.txt                                  |
+   | If you did not receive a copy of the PHP license and are unable to   |
+   | obtain it through the world-wide-web, please send a note to          |
+   | license@php.net so we can mail you a copy immediately.               |
+   +----------------------------------------------------------------------+
+   | Authors: Pierre Joye <pierre@php.net>                                |
+   +----------------------------------------------------------------------+
+ */
+
+ARG_ENABLE("ajaxmin", "enable ajaxmin extension", "no");
+
+function php_find_dotnet(version)
+{
+	version = version.toString();
+	STDOUT.Write("Checking for .Net " + version + " ... ");
+
+	win_root =  WshShell.Environment("Process").Item("systemroot");
+	path = win_root + "\\Microsoft.net\\Framework";
+
+	dotnet_found = false;
+	dotnet_dir = "";
+
+	f = FSO.GetFolder(path);
+	fe = new Enumerator(f.SubFolders);
+	re = new RegExp("^v" + version + ".*", "g");
+
+	for (; !fe.atEnd(); fe.moveNext()) {
+		n = FSO.GetFileName(fe.item());
+		if (n.match(re)) {
+			dotnet_found = true;
+			dotnet_dir = n;
+		}
+	}
+
+	dotnet_dir = path + "\\" + dotnet_dir
+	if (dotnet_found) {
+			WScript.StdOut.WriteLine(dotnet_dir);
+			return dotnet_dir;
+	}
+}
+
+if( PHP_AJAXMIN != "no" ) {
+	if (CHECK_LIB("odbc32.lib", "ajaxmin")) {
+		dotnet2_dir = php_find_dotnet(2);
+		dotnet4_dir = php_find_dotnet(4);
+
+		if (!dotnet2_dir || !dotnet4_dir) {
+			WARNING("Cannot be built: missing dependencies, .net 2.x or .net 4.x not found");
+		} else {
+			EXTENSION("ajaxmin", "ajaxmin.cpp" );
+			ADD_FLAG( 'LDFLAGS_AJAXMIN', '/NXCOMPAT /DYNAMICBASE');
+
+			// if debug is included, the math.h header file defines a number of inline functions which are 
+			// not inlined when debug is enabled (optimizations disabled).  This results in duplicate entries
+			// in each obj file, which prevents proper linking.
+			if( PHP_DEBUG == "yes" ) {
+					ADD_FLAG('CFLAGS_AJAXMIN', '/D ZEND_WIN32_FORCE_INLINE', 'ajaxmin');
+			}
+			ADD_FLAG( 'CFLAGS_AJAXMIN', '/GS');
+			ADD_FLAG( 'CFLAGS_AJAXMIN', '/CLR');
+		}
+	}
+}
