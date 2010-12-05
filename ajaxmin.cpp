@@ -30,6 +30,7 @@ using namespace System::Text;
 using namespace System::IO;
 using namespace Microsoft::Ajax::Utilities;
 
+#pragma managed(push, off)
 ZEND_GET_MODULE(ajaxmin)
 
 PHP_MINFO_FUNCTION(ajaxmin);
@@ -74,6 +75,7 @@ PHP_MINFO_FUNCTION(ajaxmin)
 	DISPLAY_INI_ENTRIES();
 	php_info_print_table_end();
 }
+#pragma managed(push, on)
 
 PHP_FUNCTION(ajaxmin_minify_js)
 {
@@ -96,10 +98,8 @@ PHP_FUNCTION(ajaxmin_minify_js)
 
 	try {
 		String^ miniString;
-		UTF8Encoding^ utf8 = gcnew UTF8Encoding;
-		CodeSettings^ settings = gcnew CodeSettings();
-
 #if 0 /* TODO: add settings support for fine grained options */
+		CodeSettings^ settings = gcnew CodeSettings();
 		settings->CollapseToLiteral = true;
 		settings->CombineDuplicateLiterals = true;
 		settings->InlineSafeStrings = true;
@@ -108,15 +108,16 @@ PHP_FUNCTION(ajaxmin_minify_js)
 		settings->PreserveFunctionNames = false;
 		settings->RemoveUnneededCode = true;
 
+
 		miniString = mini->MinifyJavaScript(strString, settings);
 #endif
 		miniString = mini->MinifyJavaScript(strString);
 
+		UTF8Encoding^ utf8 = gcnew UTF8Encoding;
 		array<Byte>^encodedBytes = utf8->GetBytes(miniString);
 		cli::pin_ptr<unsigned char> utf8_char = &encodedBytes[0];
 
 		RETURN_STRING((const char*) utf8_char, 1);
-
 	/*TODO: Check if Serializer actually throws exception not extending the base Exeption class 
 	 * Did not manage to throw such ex so far. Have asked the devs.
 	 */
@@ -148,20 +149,14 @@ PHP_FUNCTION(ajaxmin_minify_css)
 
 	try {
 		String^ miniString;
-		UTF8Encoding^ utf8 = gcnew UTF8Encoding;
-		CodeSettings^ settings = gcnew CodeSettings();
-#if 0 /* TODO: add settings support for fine grained options */
-		settings->CollapseToLiteral = true;
-		settings->CombineDuplicateLiterals = true;
-		settings->InlineSafeStrings = true;
-		settings->LocalRenaming = LocalRenaming::CrunchAll;
-		settings->MinifyCode = true;
-		settings->PreserveFunctionNames = false;
-		settings->RemoveUnneededCode = true;
 
+#if 0 /* TODO: add settings support for fine grained options */
+		CssSettings^ settings = gcnew CssSettings();
 		miniString = mini->MinifyStyleSheet(strString, settings);
 #endif
 		miniString = mini->MinifyStyleSheet(strString);
+
+		UTF8Encoding^ utf8 = gcnew UTF8Encoding;
 
 		array<Byte>^encodedBytes = utf8->GetBytes(miniString);
 		cli::pin_ptr<unsigned char> utf8_char = &encodedBytes[0];
