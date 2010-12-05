@@ -154,6 +154,7 @@ PHP_FUNCTION(ajaxmin_minify_css)
 		CssSettings^ settings = gcnew CssSettings();
 		miniString = mini->MinifyStyleSheet(strString, settings);
 #endif
+
 		miniString = mini->MinifyStyleSheet(strString);
 
 		UTF8Encoding^ utf8 = gcnew UTF8Encoding;
