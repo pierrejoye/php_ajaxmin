@@ -157,7 +157,39 @@ static zend_object_value php_csssettings_object_new(zend_class_entry *ce TSRMLS_
 }
 /* }}} */
 
-//static int get_IndentSpaces(auto_gcroot<CssSettings^> settings, zval **retval TSRMLS_DC)
+
+static long _zval_to_long(zval *value) /* {{{ */
+{
+	if (Z_TYPE_P(value) != IS_LONG) {
+		zval tmp_member;
+		tmp_member = *value;
+		zval_copy_ctor(&tmp_member);
+		convert_to_long(&tmp_member);
+		long val = Z_LVAL(tmp_member);
+		zval_dtor(&tmp_member);
+		return val;
+	} else {
+		return Z_LVAL(*value);
+	}
+}
+/* }}} */
+
+static bool _zval_to_bool(zval *value) /* {{{ */
+{
+	if (Z_TYPE_P(value) != IS_BOOL) {
+		zval tmp_member;
+		tmp_member = *value;
+		zval_copy_ctor(&tmp_member);
+		convert_to_long(&tmp_member);
+		bool val = (Z_LVAL(tmp_member) == 0 ? false : true);
+		zval_dtor(&tmp_member);
+		return val;
+	} else {
+		return (Z_LVAL(*value) == 0 ? false : true);
+	}
+}
+/* }}} */
+
 static int get_IndentSpaces(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
 
 {
@@ -168,22 +200,8 @@ static int get_IndentSpaces(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
 
 static int set_IndentSpaces(ze_csssettings_object *obj, zval *value TSRMLS_DC)
 {
-	long val;
-
-	if (Z_TYPE_P(value) != IS_LONG) {
-		zval tmp_member;
-		tmp_member = *value;
-		zval_copy_ctor(&tmp_member);
-		convert_to_long(&tmp_member);
-		val = Z_LVAL(tmp_member) == 0 ? false : true;
-		zval_dtor(&tmp_member);
-	} else {
-		val = Z_LVAL(*value);
-	}
-
-	obj->settings->IndentSpaces = val;
+	obj->settings->IndentSpaces = _zval_to_long(value);
 	return SUCCESS;
-		return SUCCESS;
 }
 
 static int get_MinifyExpressions(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
@@ -195,20 +213,7 @@ static int get_MinifyExpressions(ze_csssettings_object *obj, zval **retval TSRML
 
 static int set_MinifyExpressions(ze_csssettings_object *obj, zval *value TSRMLS_DC)
 {
-	bool val;
-
-	if (Z_TYPE_P(value) != IS_BOOL) {
-		zval tmp_member;
-		tmp_member = *value;
-		zval_copy_ctor(&tmp_member);
-		convert_to_long(&tmp_member);
-		val = Z_LVAL(tmp_member) == 0 ? false : true;
-		zval_dtor(&tmp_member);
-	} else {
-		val = Z_LVAL(*value) == 0 ? false : true;
-	}
-
-	obj->settings->MinifyExpressions = val;
+	obj->settings->MinifyExpressions = _zval_to_bool(value);
 	return SUCCESS;
 }
 
