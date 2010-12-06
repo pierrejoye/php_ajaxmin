@@ -46,6 +46,9 @@ extern "C" {
 #pragma warning( disable: 4505 )
 #endif
 
+#define CSSSETTINGS_ME(name, arg_info, flags)	ZEND_FENTRY(name, c_csssettings_ ##name, arg_info, flags)
+#define CSSSETTINGS_METHOD(name)	ZEND_NAMED_FUNCTION(c_csssettings_##name)
+
 } // extern "C"
 
 extern zend_module_entry ajaxmin_module_entry;

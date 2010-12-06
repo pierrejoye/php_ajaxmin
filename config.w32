@@ -64,6 +64,7 @@ if( PHP_AJAXMIN != "no" ) {
 			// in each obj file, which prevents proper linking.
 			if( PHP_DEBUG == "yes" ) {
 					ADD_FLAG('CFLAGS_AJAXMIN', '/D ZEND_WIN32_FORCE_INLINE', 'ajaxmin');
+					ADD_FLAG( 'CFLAGS_AJAXMIN', '/debug');
 			}
 			ADD_FLAG( 'CFLAGS_AJAXMIN', '/GS');
 			ADD_FLAG( 'CFLAGS_AJAXMIN', '/CLR');
