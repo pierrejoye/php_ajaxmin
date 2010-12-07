@@ -57,6 +57,7 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_ajaxmin_minify_css, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
 	ZEND_ARG_INFO(0, options)
+	ZEND_ARG_INFO(0, filename_out)
 ZEND_END_ARG_INFO()
 
 zend_function_entry ajaxmin_functions[] = {
@@ -435,8 +436,10 @@ PHP_FUNCTION(ajaxmin_minify_css) /* {{{ */
 	int str_len = 0;
 	char *filename = NULL;
 	int filename_len = 0;
+	zval *csssettings;
+	ze_csssettings_object *obj;
 
-	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|ls", &str, &str_len, &filename, &filename_len) == FAILURE)
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|Os", &str, &str_len, &csssettings, csssettings_class_entry, &filename, &filename_len) == FAILURE)
 	{
 			RETURN_FALSE;
 	}
@@ -448,16 +451,17 @@ PHP_FUNCTION(ajaxmin_minify_css) /* {{{ */
 
 	Minifier ^mini = gcnew Minifier;
 
+	obj = (ze_csssettings_object *)zend_objects_get_address(csssettings TSRMLS_CC);
+
 	try {
 		String^ miniString;
-		CssSettings^ settings = gcnew CssSettings();
-
-#if 0 /* TODO: add settings support for fine grained options */
-		CssSettings^ settings = gcnew CssSettings();
-		miniString = mini->MinifyStyleSheet(strString, settings);
-#endif
-
-		miniString = mini->MinifyStyleSheet(strString);
+		if (obj) {
+			CssSettings^ m_settings = obj->settings.get();
+			printf("using settings\n");
+			miniString = mini->MinifyStyleSheet(strString, m_settings);
+		} else {
+			miniString = mini->MinifyStyleSheet(strString);
+		}
 
 		UTF8Encoding^ utf8 = gcnew UTF8Encoding;
 

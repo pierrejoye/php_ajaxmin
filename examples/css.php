@@ -40,3 +40,8 @@ echo "\n";
 var_dump($settings->ColorNames);
 $settings->ColorNames = CssSettings::CSS_COLOR_HEX;
 var_dump($settings->ColorNames);
+
+$ret = ajaxmin_minify_css($css, $settings);
+$len_min = strlen($ret);
+echo "$len > $len_min\n";
+file_put_contents('a.txt', $ret);
