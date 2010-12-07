@@ -90,15 +90,15 @@ typedef struct _ze_csssettings_object {
 	auto_gcroot<CssSettings^> settings;
 } ze_csssettings_object;
 
-typedef int (*csssettings_getter)(ze_csssettings_object *obj, zval **retval);
-typedef int (*csssettings_setter)(ze_csssettings_object *obj, zval *value);
+typedef int (*csssettings_getter)(ze_csssettings_object *obj, zval **retval TSRMLS_DC);
+typedef int (*csssettings_setter)(ze_csssettings_object *obj, zval *value TSRMLS_DC);
 
 typedef struct _csssettings_prop_handler {
 	csssettings_getter getter;
 	csssettings_setter setter;
 }csssettings_prop_handler;
 
-static void ajaxmin_register_prop_handler(HashTable *prop_handler, char *name, csssettings_getter getter, csssettings_setter setter) /* {{{ */
+static void ajaxmin_register_prop_handler(HashTable *prop_handler, char *name, csssettings_getter getter, csssettings_setter setter TSRMLS_DC) /* {{{ */
 {
 	csssettings_prop_handler hnd;
 
@@ -308,7 +308,7 @@ static void php_csssettings_write_property(zval *object, zval *member, zval *val
 	if (obj->prop_handler != NULL) {
 		ret = zend_hash_find((HashTable *)obj->prop_handler, Z_STRVAL_P(member), Z_STRLEN_P(member)+1, (void **) &hnd);
 		if (ret == SUCCESS) {
-			ret = hnd->setter(obj, value);
+			ret = hnd->setter(obj, value TSRMLS_CC);
 			if (ret != SUCCESS) {
 				php_error_docref(NULL TSRMLS_CC, E_WARNING, "Fail to set property value");
 			}
@@ -345,7 +345,7 @@ static zval * php_csssettings_read_property(zval *object, zval *member, int type
 	if (zend_hash_find(obj->prop_handler, Z_STRVAL_P(member), Z_STRLEN_P(member)+1, (void **)&hnd) != SUCCESS) {
 		retval = EG(uninitialized_zval_ptr);
 	} else {
-		if (hnd->getter(obj, &retval) != SUCCESS) {
+		if (hnd->getter(obj, &retval TSRMLS_CC) != SUCCESS) {
 			retval = EG(uninitialized_zval_ptr);
 		}
 	}
