@@ -191,7 +191,6 @@ static bool _zval_to_bool(zval *value) /* {{{ */
 /* }}} */
 
 static int get_IndentSpaces(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
-
 {
 	ALLOC_ZVAL(*retval);
 	ZVAL_LONG(*retval, obj->settings->IndentSpaces);
@@ -217,12 +216,72 @@ static int set_MinifyExpressions(ze_csssettings_object *obj, zval *value TSRMLS_
 	return SUCCESS;
 }
 
+static int get_TermSemicolons(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
+{
+	ALLOC_ZVAL(*retval);
+	ZVAL_BOOL(*retval, obj->settings->TermSemicolons);
+	return SUCCESS;
+}
+
+static int set_TermSemicolons(ze_csssettings_object *obj, zval *value TSRMLS_DC)
+{
+	obj->settings->TermSemicolons = _zval_to_bool(value);
+	return SUCCESS;
+}
+
+static int get_ExpandOutput(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
+{
+	ALLOC_ZVAL(*retval);
+	ZVAL_BOOL(*retval, obj->settings->ExpandOutput);
+	return SUCCESS;
+}
+
+static int set_ExpandOutput(ze_csssettings_object *obj, zval *value TSRMLS_DC)
+{
+	obj->settings->ExpandOutput = _zval_to_bool(value);
+	return SUCCESS;
+}
+
+static int get_CommentMode(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
+{
+	ALLOC_ZVAL(*retval);
+	ZVAL_LONG(*retval, (long)obj->settings->CommentMode);
+	return SUCCESS;
+}
+
+static int set_CommentMode(ze_csssettings_object *obj, zval *value TSRMLS_DC)
+{
+	long val =_zval_to_long(value);
+	if (val < 0 || val > 3) {
+		return FAILURE;
+	}
+	obj->settings->CommentMode = (CssComment)_zval_to_long(value);
+	return SUCCESS;
+}
+
+
+static int get_ColorNames(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
+{
+	ALLOC_ZVAL(*retval);
+	ZVAL_LONG(*retval, (long)obj->settings->ColorNames);
+	return SUCCESS;
+}
+
+static int set_ColorNames(ze_csssettings_object *obj, zval *value TSRMLS_DC)
+{
+	long val =_zval_to_long(value);
+	if (val < 0 || val > 2) {
+		return FAILURE;
+	}
+	obj->settings->ColorNames = (CssColor)_zval_to_long(value);
+	return SUCCESS;
+}
+
 static HashTable *php_csssettings_get_properties(zval *object TSRMLS_DC) /* {{{ */
 {
 	HashTable *h;
 	return h;
 }
-
 
 /* {{{ xmlreader_write_property */
 static void php_csssettings_write_property(zval *object, zval *member, zval *value TSRMLS_DC)
@@ -409,13 +468,15 @@ PHP_FUNCTION(ajaxmin_minify_css)
 	RETURN_FALSE;
 }
 
-
-
 /* {{{ ze_zip_object_class_functions */
 static const zend_function_entry csssettings_methods[] = {
 	CSSSETTINGS_ME(test,			arginfo_csssettings__void, ZEND_ACC_PUBLIC)
 	{NULL, NULL, NULL}
 };
+/* {{{ REGISTER_ZIP_CLASS_CONST_LONG */
+#define REGISTER_CSSSETTINGS_CLASS_CONST_LONG(const_name, value) \
+	    zend_declare_class_constant_long(csssettings_class_entry, const_name, sizeof(const_name)-1, (long)value TSRMLS_CC);
+/* }}} */
 
 PHP_MINIT_FUNCTION(ajaxmin) {
 	zend_class_entry csssettings_ce;
@@ -436,7 +497,19 @@ PHP_MINIT_FUNCTION(ajaxmin) {
 	zend_hash_init(&csssettings_prop_handlers, 0, NULL, NULL, 1);
 	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "IndentSpaces", get_IndentSpaces, set_IndentSpaces TSRMLS_CC);
 	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "MinifyExpressions", get_MinifyExpressions, set_MinifyExpressions TSRMLS_CC);
+	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "TermSemicolons", get_TermSemicolons, set_TermSemicolons TSRMLS_CC);
+	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "ExpandOutput", get_ExpandOutput, set_ExpandOutput TSRMLS_CC);
+	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "CommentMode", get_CommentMode, set_CommentMode TSRMLS_CC);
+	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "ColorNames", get_ColorNames, set_ColorNames TSRMLS_CC);
 
+	REGISTER_CSSSETTINGS_CLASS_CONST_LONG("CSS_COLOR_STRICT", 0);
+	REGISTER_CSSSETTINGS_CLASS_CONST_LONG("CSS_COLOR_HEX", 1);
+	REGISTER_CSSSETTINGS_CLASS_CONST_LONG("CSS_COLOR_MAJOR", 2);
+
+	REGISTER_CSSSETTINGS_CLASS_CONST_LONG("CSS_COMMENT_IMPORTANT", 0);
+	REGISTER_CSSSETTINGS_CLASS_CONST_LONG("CSS_COMMENT_NONE", 1);
+	REGISTER_CSSSETTINGS_CLASS_CONST_LONG("CSS_COMMENT_ALL", 2);
+	REGISTER_CSSSETTINGS_CLASS_CONST_LONG("CSS_COMMENT_HACK", 3);
 	return SUCCESS;
 }
 
@@ -458,4 +531,5 @@ static PHP_MSHUTDOWN_FUNCTION(ajaxmin)
 }
 /* }}} */
 /* }}} */
+
 

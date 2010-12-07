@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL|E_NOTICE);
 
 $css = file_get_contents(__DIR__ . '/example.css');
 $len = strlen($css);
@@ -9,10 +10,33 @@ echo "$len > $len_min\n";
 
 $settings = new CssSettings();
 var_dump($settings->IndentSpaces);
-var_dump($settings->MinifyExpressions);
+$settings->IndentSpaces = 8;
+var_dump($settings->IndentSpaces);
 
+var_dump($settings->MinifyExpressions);
 $settings->MinifyExpressions = FALSE;
 var_dump($settings->MinifyExpressions);
 
-$settings->IndentSpaces = 8;
-var_dump($settings->IndentSpaces);
+echo "\n";
+
+var_dump($settings->TermSemicolons);
+$settings->TermSemicolons = TRUE;
+var_dump($settings->TermSemicolons);
+
+echo "\n";
+
+var_dump($settings->ExpandOutput);
+$settings->ExpandOutput = FALSE;
+var_dump($settings->ExpandOutput);
+
+echo "\n";
+
+var_dump($settings->CommentMode);
+$settings->CommentMode = CssSettings::CSS_COMMENT_ALL;
+var_dump($settings->CommentMode);
+
+echo "\n";
+
+var_dump($settings->ColorNames);
+$settings->ColorNames = CssSettings::CSS_COLOR_HEX;
+var_dump($settings->ColorNames);
