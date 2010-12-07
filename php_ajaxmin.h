@@ -22,6 +22,7 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
+#include <msclr\auto_gcroot.h>
 
 extern "C" {
 #define PHP_AJAXMIN_VERSION "0.1.0"
@@ -46,12 +47,22 @@ extern "C" {
 #pragma warning( disable: 4505 )
 #endif
 
+static zend_class_entry *csssettings_class_entry;
+static zend_object_handlers csssettings_object_handlers;
+static HashTable csssettings_prop_handlers;
+
+
+ZEND_BEGIN_ARG_INFO(arginfo_csssettings__void, 0)
+ZEND_END_ARG_INFO()
+
 #define CSSSETTINGS_ME(name, arg_info, flags)	ZEND_FENTRY(name, c_csssettings_ ##name, arg_info, flags)
 #define CSSSETTINGS_METHOD(name)	ZEND_NAMED_FUNCTION(c_csssettings_##name)
-
+PHP_MINIT_FUNCTION(csssettings);
+extern zend_module_entry ajaxmin_module_entry;
 } // extern "C"
 
-extern zend_module_entry ajaxmin_module_entry;
+bool _zval_to_bool(zval *value);
+long _zval_to_long(zval *value);
 
 #endif	/* PHP_AJAXMINIFIER_H */
 
