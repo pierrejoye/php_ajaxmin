@@ -437,7 +437,7 @@ PHP_FUNCTION(ajaxmin_minify_css) /* {{{ */
 	char *filename = NULL;
 	int filename_len = 0;
 	zval *csssettings;
-	ze_csssettings_object *obj;
+	ze_csssettings_object *obj = NULL;
 
 	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|Os", &str, &str_len, &csssettings, csssettings_class_entry, &filename, &filename_len) == FAILURE)
 	{
@@ -449,15 +449,16 @@ PHP_FUNCTION(ajaxmin_minify_css) /* {{{ */
 	}
 	String^ strString = gcnew String(str, 0, str_len);
 
-	Minifier ^mini = gcnew Minifier;
-
-	obj = (ze_csssettings_object *)zend_objects_get_address(csssettings TSRMLS_CC);
+	if (csssettings) {
+		obj = (ze_csssettings_object *)zend_objects_get_address(csssettings TSRMLS_CC);
+	}
 
 	try {
 		String^ miniString;
-		if (obj) {
+		Minifier ^mini = gcnew Minifier;
+
+		if (csssettings) {
 			CssSettings^ m_settings = obj->settings.get();
-			printf("using settings\n");
 			miniString = mini->MinifyStyleSheet(strString, m_settings);
 		} else {
 			miniString = mini->MinifyStyleSheet(strString);
