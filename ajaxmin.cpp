@@ -317,10 +317,6 @@ static void php_csssettings_write_property(zval *object, zval *member, zval *val
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Fail to set property value");
 	}
 
-	if (ret == FAILURE) {
-		
-	}
-
 	if (member == &tmp_member) {
 		zval_dtor(member);
 	}
