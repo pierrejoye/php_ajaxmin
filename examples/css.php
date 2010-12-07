@@ -32,13 +32,13 @@ var_dump($settings->ExpandOutput);
 echo "\n";
 
 var_dump($settings->CommentMode);
-$settings->CommentMode = CssSettings::CSS_COMMENT_ALL;
+$settings->CommentMode = CssSettings::COMMENT_ALL;
 var_dump($settings->CommentMode);
 
 echo "\n";
 
 var_dump($settings->ColorNames);
-$settings->ColorNames = CssSettings::CSS_COLOR_HEX;
+$settings->ColorNames = CssSettings::COLOR_HEX;
 var_dump($settings->ColorNames);
 
 $ret = ajaxmin_minify_css($css, $settings);

@@ -59,6 +59,7 @@ ZEND_END_ARG_INFO()
 #define CSSSETTINGS_METHOD(name)	ZEND_NAMED_FUNCTION(c_csssettings_##name)
 PHP_MINIT_FUNCTION(csssettings);
 extern zend_module_entry ajaxmin_module_entry;
+
 } // extern "C"
 
 bool _zval_to_bool(zval *value);

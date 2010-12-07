@@ -216,9 +216,8 @@ PHP_FUNCTION(ajaxmin_minify_css) /* {{{ */
 }
 /* }}} */
 
-
 PHP_MINIT_FUNCTION(ajaxmin) { /* {{{ */
-	PHP_MINIT_FUNCTION(csssettings);
+	PHP_MINIT(csssettings)(INIT_FUNC_ARGS_PASSTHRU);
 	return SUCCESS;
 }
 
