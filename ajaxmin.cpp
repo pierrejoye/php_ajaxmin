@@ -108,12 +108,6 @@ static void ajaxmin_register_prop_handler(HashTable *prop_handler, char *name, c
 }
 /* }}} */
 
-static int csssettings_find_functions(ze_csssettings_object *obj, zval *member, csssettings_prop_handler **hnd) /* {{{ */
-{
-	return zend_hash_find(obj->prop_handler, Z_STRVAL_P(member), Z_STRLEN_P(member)+1, (void **) hnd);
-}
-/* }}} */
-
 #define PJ_USE_NEW 1
 
 static void php_csssettings_object_free_storage(void *object TSRMLS_DC) /* {{{ */
@@ -151,7 +145,6 @@ static zend_object_value php_csssettings_object_new(zend_class_entry *ce TSRMLS_
 		(zend_objects_free_object_storage_t)php_csssettings_object_free_storage,
 		NULL TSRMLS_CC );
 
-	//retval.handlers = zend_get_std_object_handlers();
 	retval.handlers = &csssettings_object_handlers;
 	return retval;
 }
@@ -436,7 +429,7 @@ PHP_FUNCTION(ajaxmin_minify_css) /* {{{ */
 	int str_len = 0;
 	char *filename = NULL;
 	int filename_len = 0;
-	zval *csssettings;
+	zval *csssettings = NULL;
 	ze_csssettings_object *obj = NULL;
 
 	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|Os", &str, &str_len, &csssettings, csssettings_class_entry, &filename, &filename_len) == FAILURE)
