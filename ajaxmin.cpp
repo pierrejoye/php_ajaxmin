@@ -182,7 +182,7 @@ static bool _zval_to_bool(zval *value) /* {{{ */
 }
 /* }}} */
 
-static int get_IndentSpaces(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
+static int csssettings_get_IndentSpaces(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
 {
 	ALLOC_ZVAL(*retval);
 	ZVAL_LONG(*retval, obj->settings->IndentSpaces);
@@ -190,14 +190,14 @@ static int get_IndentSpaces(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
 }
 /* }}} */
 
-static int set_IndentSpaces(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
+static int csssettings_set_IndentSpaces(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
 {
 	obj->settings->IndentSpaces = _zval_to_long(value);
 	return SUCCESS;
 }
 /* }}} */
 
-static int get_MinifyExpressions(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
+static int csssettings_get_MinifyExpressions(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
 {
 	ALLOC_ZVAL(*retval);
 	ZVAL_BOOL(*retval, obj->settings->MinifyExpressions);
@@ -205,14 +205,14 @@ static int get_MinifyExpressions(ze_csssettings_object *obj, zval **retval TSRML
 }
 /* }}} */
 
-static int set_MinifyExpressions(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
+static int csssettings_set_MinifyExpressions(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
 {
 	obj->settings->MinifyExpressions = _zval_to_bool(value);
 	return SUCCESS;
 }
 /* }}} */
 
-static int get_TermSemicolons(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
+static int csssettings_get_TermSemicolons(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
 {
 	ALLOC_ZVAL(*retval);
 	ZVAL_BOOL(*retval, obj->settings->TermSemicolons);
@@ -220,14 +220,14 @@ static int get_TermSemicolons(ze_csssettings_object *obj, zval **retval TSRMLS_D
 }
 /* }}} */
 
-static int set_TermSemicolons(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
+static int csssettings_set_TermSemicolons(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
 {
 	obj->settings->TermSemicolons = _zval_to_bool(value);
 	return SUCCESS;
 }
 /* }}} */
 
-static int get_ExpandOutput(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
+static int csssettings_get_ExpandOutput(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
 {
 	ALLOC_ZVAL(*retval);
 	ZVAL_BOOL(*retval, obj->settings->ExpandOutput);
@@ -235,14 +235,14 @@ static int get_ExpandOutput(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
 }
 /* }}} */
 
-static int set_ExpandOutput(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
+static int csssettings_set_ExpandOutput(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
 {
 	obj->settings->ExpandOutput = _zval_to_bool(value);
 	return SUCCESS;
 }
 /* }}} */
 
-static int get_CommentMode(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
+static int csssettings_get_CommentMode(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
 {
 	ALLOC_ZVAL(*retval);
 	ZVAL_LONG(*retval, (long)obj->settings->CommentMode);
@@ -250,7 +250,7 @@ static int get_CommentMode(ze_csssettings_object *obj, zval **retval TSRMLS_DC) 
 }
 /* }}} */
 
-static int set_CommentMode(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
+static int csssettings_set_CommentMode(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
 {
 	long val =_zval_to_long(value);
 	if (val < 0 || val > 3) {
@@ -261,7 +261,7 @@ static int set_CommentMode(ze_csssettings_object *obj, zval *value TSRMLS_DC) /*
 }
 /* }}} */
 
-static int get_ColorNames(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
+static int csssettings_get_ColorNames(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
 {
 	ALLOC_ZVAL(*retval);
 	ZVAL_LONG(*retval, (long)obj->settings->ColorNames);
@@ -269,7 +269,7 @@ static int get_ColorNames(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /
 }
 /* }}} */
 
-static int set_ColorNames(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
+static int csssettings_set_ColorNames(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
 {
 	long val =_zval_to_long(value);
 	if (val < 0 || val > 2) {
@@ -503,12 +503,12 @@ PHP_MINIT_FUNCTION(ajaxmin) { /* {{{ */
 	csssettings_class_entry = zend_register_internal_class(&csssettings_ce TSRMLS_CC);
 
 	zend_hash_init(&csssettings_prop_handlers, 0, NULL, NULL, 1);
-	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "IndentSpaces", get_IndentSpaces, set_IndentSpaces TSRMLS_CC);
-	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "MinifyExpressions", get_MinifyExpressions, set_MinifyExpressions TSRMLS_CC);
-	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "TermSemicolons", get_TermSemicolons, set_TermSemicolons TSRMLS_CC);
-	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "ExpandOutput", get_ExpandOutput, set_ExpandOutput TSRMLS_CC);
-	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "CommentMode", get_CommentMode, set_CommentMode TSRMLS_CC);
-	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "ColorNames", get_ColorNames, set_ColorNames TSRMLS_CC);
+	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "IndentSpaces", csssettings_get_IndentSpaces, csssettings_set_IndentSpaces TSRMLS_CC);
+	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "MinifyExpressions", csssettings_get_MinifyExpressions, csssettings_set_MinifyExpressions TSRMLS_CC);
+	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "TermSemicolons", csssettings_get_TermSemicolons, csssettings_set_TermSemicolons TSRMLS_CC);
+	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "ExpandOutput", csssettings_get_ExpandOutput, csssettings_set_ExpandOutput TSRMLS_CC);
+	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "CommentMode", csssettings_get_CommentMode, csssettings_set_CommentMode TSRMLS_CC);
+	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "ColorNames", csssettings_get_ColorNames, csssettings_set_ColorNames TSRMLS_CC);
 
 	REGISTER_CSSSETTINGS_CLASS_CONST_LONG("CSS_COLOR_STRICT", 0);
 	REGISTER_CSSSETTINGS_CLASS_CONST_LONG("CSS_COLOR_HEX", 1);
