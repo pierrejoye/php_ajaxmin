@@ -89,7 +89,6 @@ typedef struct _ze_csssettings_object {
 	auto_gcroot<CssSettings^> settings;
 } ze_csssettings_object;
 
-//typedef int (*csssettings_getter)(auto_gcroot<CssSettings^> settings, zval **retval);
 typedef int (*csssettings_getter)(ze_csssettings_object *obj, zval **retval);
 typedef int (*csssettings_setter)(ze_csssettings_object *obj, zval *value);
 
@@ -157,7 +156,6 @@ static zend_object_value php_csssettings_object_new(zend_class_entry *ce TSRMLS_
 }
 /* }}} */
 
-
 static long _zval_to_long(zval *value) /* {{{ */
 {
 	if (Z_TYPE_P(value) != IS_LONG) {
@@ -190,66 +188,75 @@ static bool _zval_to_bool(zval *value) /* {{{ */
 }
 /* }}} */
 
-static int get_IndentSpaces(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
+static int get_IndentSpaces(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
 {
 	ALLOC_ZVAL(*retval);
 	ZVAL_LONG(*retval, obj->settings->IndentSpaces);
 	return SUCCESS;
 }
+/* }}} */
 
-static int set_IndentSpaces(ze_csssettings_object *obj, zval *value TSRMLS_DC)
+static int set_IndentSpaces(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
 {
 	obj->settings->IndentSpaces = _zval_to_long(value);
 	return SUCCESS;
 }
+/* }}} */
 
-static int get_MinifyExpressions(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
+static int get_MinifyExpressions(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
 {
 	ALLOC_ZVAL(*retval);
 	ZVAL_BOOL(*retval, obj->settings->MinifyExpressions);
 	return SUCCESS;
 }
+/* }}} */
 
-static int set_MinifyExpressions(ze_csssettings_object *obj, zval *value TSRMLS_DC)
+static int set_MinifyExpressions(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
 {
 	obj->settings->MinifyExpressions = _zval_to_bool(value);
 	return SUCCESS;
 }
+/* }}} */
 
-static int get_TermSemicolons(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
+static int get_TermSemicolons(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
 {
 	ALLOC_ZVAL(*retval);
 	ZVAL_BOOL(*retval, obj->settings->TermSemicolons);
 	return SUCCESS;
 }
+/* }}} */
 
-static int set_TermSemicolons(ze_csssettings_object *obj, zval *value TSRMLS_DC)
+static int set_TermSemicolons(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
 {
 	obj->settings->TermSemicolons = _zval_to_bool(value);
 	return SUCCESS;
 }
+/* }}} */
 
-static int get_ExpandOutput(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
+static int get_ExpandOutput(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
 {
 	ALLOC_ZVAL(*retval);
 	ZVAL_BOOL(*retval, obj->settings->ExpandOutput);
 	return SUCCESS;
 }
+/* }}} */
 
-static int set_ExpandOutput(ze_csssettings_object *obj, zval *value TSRMLS_DC)
+static int set_ExpandOutput(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
 {
 	obj->settings->ExpandOutput = _zval_to_bool(value);
 	return SUCCESS;
 }
+/* }}} */
 
-static int get_CommentMode(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
+static int get_CommentMode(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
 {
 	ALLOC_ZVAL(*retval);
 	ZVAL_LONG(*retval, (long)obj->settings->CommentMode);
 	return SUCCESS;
 }
+/* }}} */
 
-static int set_CommentMode(ze_csssettings_object *obj, zval *value TSRMLS_DC)
+static int set_CommentMode(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
 {
 	long val =_zval_to_long(value);
 	if (val < 0 || val > 3) {
@@ -258,16 +265,17 @@ static int set_CommentMode(ze_csssettings_object *obj, zval *value TSRMLS_DC)
 	obj->settings->CommentMode = (CssComment)_zval_to_long(value);
 	return SUCCESS;
 }
+/* }}} */
 
-
-static int get_ColorNames(ze_csssettings_object *obj, zval **retval TSRMLS_DC)
+static int get_ColorNames(ze_csssettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
 {
 	ALLOC_ZVAL(*retval);
 	ZVAL_LONG(*retval, (long)obj->settings->ColorNames);
 	return SUCCESS;
 }
+/* }}} */
 
-static int set_ColorNames(ze_csssettings_object *obj, zval *value TSRMLS_DC)
+static int set_ColorNames(ze_csssettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
 {
 	long val =_zval_to_long(value);
 	if (val < 0 || val > 2) {
@@ -276,15 +284,16 @@ static int set_ColorNames(ze_csssettings_object *obj, zval *value TSRMLS_DC)
 	obj->settings->ColorNames = (CssColor)_zval_to_long(value);
 	return SUCCESS;
 }
+/* }}} */
 
 static HashTable *php_csssettings_get_properties(zval *object TSRMLS_DC) /* {{{ */
 {
 	HashTable *h;
 	return h;
 }
+/* }}} */
 
-/* {{{ xmlreader_write_property */
-static void php_csssettings_write_property(zval *object, zval *member, zval *value TSRMLS_DC)
+static void php_csssettings_write_property(zval *object, zval *member, zval *value TSRMLS_DC) /* {{{ */
 {
 	ze_csssettings_object *obj;
 	csssettings_prop_handler *hnd;
@@ -323,7 +332,7 @@ static void php_csssettings_write_property(zval *object, zval *member, zval *val
 }
 /* }}} */
 
-static zval * php_csssettings_read_property(zval *object, zval *member, int type TSRMLS_DC)/* {{{ */
+static zval * php_csssettings_read_property(zval *object, zval *member, int type TSRMLS_DC) /* {{{ */
 {
 	ze_csssettings_object *obj;
 	zval tmp_member;
@@ -352,21 +361,23 @@ static zval * php_csssettings_read_property(zval *object, zval *member, int type
 
 	return retval;
 }
+/* }}} */
 
-static int php_csssettings_has_property(zval *object, zval *member, int has_set_exists TSRMLS_DC)/* {{{ */
+static int php_csssettings_has_property(zval *object, zval *member, int has_set_exists TSRMLS_DC) /* {{{ */
 {
 	return 1;
 }
+/* }}} */
 
 /* {{{ proto bool ZipArchive::unchangeArchive()
 Revert all global changes to the archive archive.  For now, this only reverts archive comment changes. */
-static CSSSETTINGS_METHOD(test)
+static CSSSETTINGS_METHOD(test) /* {{{ */
 {
 	RETURN_TRUE;
 }
 /* }}} */
 
-PHP_FUNCTION(ajaxmin_minify_js)
+PHP_FUNCTION(ajaxmin_minify_js) /* {{{ */
 {
 	char *str = NULL;
 	int str_len = 0;
@@ -416,8 +427,9 @@ PHP_FUNCTION(ajaxmin_minify_js)
 
 	RETURN_FALSE;
 }
+/* }}} */
 
-PHP_FUNCTION(ajaxmin_minify_css)
+PHP_FUNCTION(ajaxmin_minify_css) /* {{{ */
 {
 	char *str = NULL;
 	int str_len = 0;
@@ -463,18 +475,21 @@ PHP_FUNCTION(ajaxmin_minify_css)
 
 	RETURN_FALSE;
 }
+/* }}} */
 
 /* {{{ ze_zip_object_class_functions */
 static const zend_function_entry csssettings_methods[] = {
 	CSSSETTINGS_ME(test,			arginfo_csssettings__void, ZEND_ACC_PUBLIC)
 	{NULL, NULL, NULL}
 };
+/* }}} */
+
 /* {{{ REGISTER_ZIP_CLASS_CONST_LONG */
 #define REGISTER_CSSSETTINGS_CLASS_CONST_LONG(const_name, value) \
 	    zend_declare_class_constant_long(csssettings_class_entry, const_name, sizeof(const_name)-1, (long)value TSRMLS_CC);
 /* }}} */
 
-PHP_MINIT_FUNCTION(ajaxmin) {
+PHP_MINIT_FUNCTION(ajaxmin) { /* {{{ */
 	zend_class_entry csssettings_ce;
 
 	memcpy(&csssettings_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
@@ -488,7 +503,6 @@ PHP_MINIT_FUNCTION(ajaxmin) {
 	INIT_CLASS_ENTRY(csssettings_ce, "CssSettings", csssettings_methods);
 	csssettings_ce.create_object = php_csssettings_object_new;
 	csssettings_class_entry = zend_register_internal_class(&csssettings_ce TSRMLS_CC);
-//	csssettings_ce.ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL_CLASS; 
 
 	zend_hash_init(&csssettings_prop_handlers, 0, NULL, NULL, 1);
 	ajaxmin_register_prop_handler(&csssettings_prop_handlers, "IndentSpaces", get_IndentSpaces, set_IndentSpaces TSRMLS_CC);
@@ -509,7 +523,7 @@ PHP_MINIT_FUNCTION(ajaxmin) {
 	return SUCCESS;
 }
 
-static PHP_MINFO_FUNCTION(ajaxmin)
+static PHP_MINFO_FUNCTION(ajaxmin) /* {{{ */
 {
 	php_info_print_table_start();
 	php_info_print_table_header(2, "Microsoft Ajax Minifier", "enabled");
@@ -517,6 +531,7 @@ static PHP_MINFO_FUNCTION(ajaxmin)
 	DISPLAY_INI_ENTRIES();
 	php_info_print_table_end();
 }
+/* }}} */
 
 /* {{{ PHP_MSHUTDOWN_FUNCTION
  */
@@ -526,6 +541,3 @@ static PHP_MSHUTDOWN_FUNCTION(ajaxmin)
 	return SUCCESS;
 }
 /* }}} */
-/* }}} */
-
-
