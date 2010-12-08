@@ -121,7 +121,7 @@ PHP_FUNCTION(ajaxmin_minify_js) /* {{{ */
  	zval *codesettings = NULL;
 	ze_codesettings_object *obj = NULL;
 
-	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sO", &str, &str_len, &codesettings, codesettings_class_entry) == FAILURE)
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|O", &str, &str_len, &codesettings, codesettings_class_entry) == FAILURE)
 	{
 			RETURN_FALSE;
 	}
