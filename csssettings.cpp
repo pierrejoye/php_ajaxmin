@@ -34,6 +34,9 @@ using namespace msclr;
 
 #include "csssettings.hpp"
 
+ZEND_BEGIN_ARG_INFO(arginfo_csssettings__void, 0)
+ZEND_END_ARG_INFO()
+
 typedef int (*csssettings_getter)(ze_csssettings_object *obj, zval **retval TSRMLS_DC);
 typedef int (*csssettings_setter)(ze_csssettings_object *obj, zval *value TSRMLS_DC);
 

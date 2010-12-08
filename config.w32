@@ -56,7 +56,7 @@ if( PHP_AJAXMIN != "no" ) {
 		if (!dotnet2_dir || !dotnet4_dir) {
 			WARNING("Cannot be built: missing dependencies, .net 2.x or .net 4.x not found");
 		} else {
-			EXTENSION("ajaxmin", "ajaxmin.cpp csssettings.cpp" );
+			EXTENSION("ajaxmin", "ajaxmin.cpp csssettings.cpp codesettings.cpp" );
 			ADD_FLAG( 'LDFLAGS_AJAXMIN', '/NXCOMPAT /DYNAMICBASE');
 
 			// if debug is included, the math.h header file defines a number of inline functions which are 

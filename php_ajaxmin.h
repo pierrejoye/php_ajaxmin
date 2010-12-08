@@ -47,17 +47,23 @@ extern "C" {
 #pragma warning( disable: 4505 )
 #endif
 
+
+#define CSSSETTINGS_ME(name, arg_info, flags)	ZEND_FENTRY(name, c_csssettings_ ##name, arg_info, flags)
+#define CSSSETTINGS_METHOD(name)	ZEND_NAMED_FUNCTION(c_csssettings_##name)
 static zend_class_entry *csssettings_class_entry;
 static zend_object_handlers csssettings_object_handlers;
 static HashTable csssettings_prop_handlers;
 
 
-ZEND_BEGIN_ARG_INFO(arginfo_csssettings__void, 0)
-ZEND_END_ARG_INFO()
+#define CODESETTINGS_ME(name, arg_info, flags)	ZEND_FENTRY(name, c_codesettings_ ##name, arg_info, flags)
+#define CODESETTINGS_METHOD(name)	ZEND_NAMED_FUNCTION(c_codesettings_##name)
+static zend_class_entry *codesettings_class_entry;
+static zend_object_handlers codesettings_object_handlers;
+static HashTable codesettings_prop_handlers;
 
-#define CSSSETTINGS_ME(name, arg_info, flags)	ZEND_FENTRY(name, c_csssettings_ ##name, arg_info, flags)
-#define CSSSETTINGS_METHOD(name)	ZEND_NAMED_FUNCTION(c_csssettings_##name)
+
 PHP_MINIT_FUNCTION(csssettings);
+PHP_MINIT_FUNCTION(codesettings);
 extern zend_module_entry ajaxmin_module_entry;
 
 } // extern "C"
@@ -66,4 +72,3 @@ bool _zval_to_bool(zval *value);
 long _zval_to_long(zval *value);
 
 #endif	/* PHP_AJAXMINIFIER_H */
-
