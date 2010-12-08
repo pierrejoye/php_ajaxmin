@@ -157,6 +157,99 @@ static int codesettings_set_InlineSafeStrings(ze_codesettings_object *obj, zval 
 }
 /* }}} */
 
+static int codesettings_get_MacSafariQuirks(ze_codesettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
+{
+	ALLOC_ZVAL(*retval);
+	ZVAL_BOOL(*retval, obj->settings->MacSafariQuirks);
+	return SUCCESS;
+}
+/* }}} */
+
+static int codesettings_set_MacSafariQuirks(ze_codesettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
+{
+	obj->settings->MacSafariQuirks = _zval_to_bool(value);
+	return SUCCESS;
+}
+/* }}} */
+
+static int codesettings_get_MinifyCode(ze_codesettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
+{
+	ALLOC_ZVAL(*retval);
+	ZVAL_BOOL(*retval, obj->settings->MinifyCode);
+	return SUCCESS;
+}
+/* }}} */
+
+static int codesettings_set_MinifyCode(ze_codesettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
+{
+	obj->settings->MinifyCode = _zval_to_bool(value);
+	return SUCCESS;
+}
+/* }}} */
+
+static int codesettings_get_PreserveFunctionNames(ze_codesettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
+{
+	ALLOC_ZVAL(*retval);
+	ZVAL_BOOL(*retval, obj->settings->PreserveFunctionNames);
+	return SUCCESS;
+}
+/* }}} */
+
+static int codesettings_set_PreserveFunctionNames(ze_codesettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
+{
+	obj->settings->PreserveFunctionNames = _zval_to_bool(value);
+	return SUCCESS;
+}
+/* }}} */
+
+static int codesettings_get_RemoveFunctionExpressionNames(ze_codesettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
+{
+	ALLOC_ZVAL(*retval);
+	ZVAL_BOOL(*retval, obj->settings->RemoveFunctionExpressionNames);
+	return SUCCESS;
+}
+/* }}} */
+
+static int codesettings_set_RemoveFunctionExpressionNames(ze_codesettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
+{
+	obj->settings->RemoveFunctionExpressionNames = _zval_to_bool(value);
+	return SUCCESS;
+}
+/* }}} */
+
+static int codesettings_get_RemoveUnneededCode(ze_codesettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
+{
+	ALLOC_ZVAL(*retval);
+	ZVAL_BOOL(*retval, obj->settings->RemoveUnneededCode);
+	return SUCCESS;
+}
+/* }}} */
+
+static int codesettings_set_RemoveUnneededCode(ze_codesettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
+{
+	obj->settings->RemoveUnneededCode = _zval_to_bool(value);
+	return SUCCESS;
+}
+/* }}} */
+
+static int codesettings_get_StripDebugStatements(ze_codesettings_object *obj, zval **retval TSRMLS_DC) /* {{{ */
+{
+	ALLOC_ZVAL(*retval);
+	ZVAL_BOOL(*retval, obj->settings->StripDebugStatements);
+	return SUCCESS;
+}
+/* }}} */
+
+static int codesettings_set_StripDebugStatements(ze_codesettings_object *obj, zval *value TSRMLS_DC) /* {{{ */
+{
+	obj->settings->StripDebugStatements = _zval_to_bool(value);
+	return SUCCESS;
+}
+/* }}} */
+
+
+
+
 static HashTable *php_codesettings_get_properties(zval *object TSRMLS_DC) /* {{{ */
 {
 	HashTable *h;
@@ -280,6 +373,13 @@ PHP_MINIT_FUNCTION(codesettings) { /* {{{ */
 	ajaxmin_register_prop_handler(&codesettings_prop_handlers, "CombineDuplicateLiterals", codesettings_get_CombineDuplicateLiterals, codesettings_set_CombineDuplicateLiterals TSRMLS_CC);
 	ajaxmin_register_prop_handler(&codesettings_prop_handlers, "IndentSize", codesettings_get_IndentSize, codesettings_set_IndentSize TSRMLS_CC);
 	ajaxmin_register_prop_handler(&codesettings_prop_handlers, "InlineSafeStrings", codesettings_get_InlineSafeStrings, codesettings_set_InlineSafeStrings TSRMLS_CC);
+	ajaxmin_register_prop_handler(&codesettings_prop_handlers, "MacSafariQuirks", codesettings_get_MacSafariQuirks, codesettings_set_MacSafariQuirks TSRMLS_CC);
+	ajaxmin_register_prop_handler(&codesettings_prop_handlers, "MinifyCode", codesettings_get_MinifyCode, codesettings_set_MinifyCode TSRMLS_CC);
+	ajaxmin_register_prop_handler(&codesettings_prop_handlers, "PreserveFunctionNames", codesettings_get_PreserveFunctionNames, codesettings_set_PreserveFunctionNames TSRMLS_CC);
+	ajaxmin_register_prop_handler(&codesettings_prop_handlers, "RemoveFunctionExpressionNames", codesettings_get_RemoveFunctionExpressionNames, codesettings_set_RemoveFunctionExpressionNames TSRMLS_CC);
+	ajaxmin_register_prop_handler(&codesettings_prop_handlers, "RemoveUnneededCode", codesettings_get_RemoveUnneededCode, codesettings_set_RemoveUnneededCode TSRMLS_CC);
+	ajaxmin_register_prop_handler(&codesettings_prop_handlers, "StripDebugStatements", codesettings_get_StripDebugStatements, codesettings_set_StripDebugStatements TSRMLS_CC);
+
 
 	REGISTER_CODESETTINGS_CLASS_CONST_LONG("COLOR_STRICT", 0);
 	REGISTER_CODESETTINGS_CLASS_CONST_LONG("COLOR_HEX", 1);
