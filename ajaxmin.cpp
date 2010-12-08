@@ -32,6 +32,7 @@ using namespace System::IO;
 using namespace Microsoft::Ajax::Utilities;
 using namespace msclr;
 #include "csssettings.hpp"
+#include "codesettings.hpp"
 
 static zend_object_value php_csssettings_object_new(zend_class_entry *class_type TSRMLS_DC);
 static void php_csssettings_object_free_storage(void *object TSRMLS_DC);
@@ -49,12 +50,12 @@ PHP_FUNCTION(ajaxmin_minify_css);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_ajaxmin_minify_js, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
-	ZEND_ARG_INFO(0, options)
+	ZEND_ARG_INFO(0, settings)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_ajaxmin_minify_css, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
-	ZEND_ARG_INFO(0, options)
+	ZEND_ARG_INFO(0, settings)
 	ZEND_ARG_INFO(0, filename_out)
 ZEND_END_ARG_INFO()
 
@@ -117,8 +118,10 @@ PHP_FUNCTION(ajaxmin_minify_js) /* {{{ */
 	int str_len = 0;
 	char *filename = NULL;
 	int filename_len = 0;
+ 	zval *codesettings = NULL;
+	ze_codesettings_object *obj = NULL;
 
-	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &str, &str_len) == FAILURE)
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sO", &str, &str_len, &codesettings, codesettings_class_entry) == FAILURE)
 	{
 			RETURN_FALSE;
 	}
@@ -128,25 +131,20 @@ PHP_FUNCTION(ajaxmin_minify_js) /* {{{ */
 	}
 	String^ strString = gcnew String(str, 0, str_len);
 
-	Minifier ^mini = gcnew Minifier;
+	if (codesettings) {
+		obj = (ze_codesettings_object *)zend_objects_get_address(codesettings TSRMLS_CC);
+	}
 
 	try {
 		String^ miniString;
-#if 0 /* TODO: add settings support for fine grained options */
-		CodeSettings^ settings = gcnew CodeSettings();
-		settings->CollapseToLiteral = true;
-		settings->CombineDuplicateLiterals = true;
-		settings->InlineSafeStrings = true;
-		settings->LocalRenaming = LocalRenaming::CrunchAll;
-		settings->MinifyCode = true;
-		settings->PreserveFunctionNames = false;
-		settings->RemoveUnneededCode = true;
+		Minifier ^mini = gcnew Minifier;
 
-
-		miniString = mini->MinifyJavaScript(strString, settings);
-#endif
-		miniString = mini->MinifyJavaScript(strString);
-
+		if (codesettings) {
+			CodeSettings^ m_settings = obj->settings.get();
+			miniString = mini->MinifyJavaScript(strString, m_settings);
+		} else {
+			miniString = mini->MinifyJavaScript(strString);
+		}
 		UTF8Encoding^ utf8 = gcnew UTF8Encoding;
 		array<Byte>^encodedBytes = utf8->GetBytes(miniString);
 		cli::pin_ptr<unsigned char> utf8_char = &encodedBytes[0];

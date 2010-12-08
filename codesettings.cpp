@@ -248,8 +248,6 @@ static int codesettings_set_StripDebugStatements(ze_codesettings_object *obj, zv
 /* }}} */
 
 
-
-
 static HashTable *php_codesettings_get_properties(zval *object TSRMLS_DC) /* {{{ */
 {
 	HashTable *h;
@@ -357,7 +355,7 @@ PHP_MINIT_FUNCTION(codesettings) { /* {{{ */
 	zend_class_entry codesettings_ce;
 
 	memcpy(&codesettings_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	codesettings_object_handlers.clone_obj		= NULL;
+	codesettings_object_handlers.clone_obj = NULL;
 	codesettings_object_handlers.get_property_ptr_ptr = NULL;
 	codesettings_object_handlers.get_properties = php_codesettings_get_properties;
 	codesettings_object_handlers.write_property	= php_codesettings_write_property;
@@ -379,7 +377,6 @@ PHP_MINIT_FUNCTION(codesettings) { /* {{{ */
 	ajaxmin_register_prop_handler(&codesettings_prop_handlers, "RemoveFunctionExpressionNames", codesettings_get_RemoveFunctionExpressionNames, codesettings_set_RemoveFunctionExpressionNames TSRMLS_CC);
 	ajaxmin_register_prop_handler(&codesettings_prop_handlers, "RemoveUnneededCode", codesettings_get_RemoveUnneededCode, codesettings_set_RemoveUnneededCode TSRMLS_CC);
 	ajaxmin_register_prop_handler(&codesettings_prop_handlers, "StripDebugStatements", codesettings_get_StripDebugStatements, codesettings_set_StripDebugStatements TSRMLS_CC);
-
 
 	REGISTER_CODESETTINGS_CLASS_CONST_LONG("COLOR_STRICT", 0);
 	REGISTER_CODESETTINGS_CLASS_CONST_LONG("COLOR_HEX", 1);

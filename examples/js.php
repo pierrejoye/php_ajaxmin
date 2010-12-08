@@ -17,3 +17,6 @@ echo $ret;
 $settings = new CodeSettings();
 //$settings->IndentSize = 3;
 var_dump($settings->IndentSize);
+
+$ret = ajaxmin_minify_js($js, $settings);
+echo $ret;
